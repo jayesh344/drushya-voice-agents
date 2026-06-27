@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drushya Digital India — Call Logs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #0c1320;
+    --bg-panel: #101a2c;
+    --bg-card: #131f33;
+    --bg-row-alt: #0f1828;
+    --teal: #2dd4bf;
+    --teal-soft: rgba(45,212,191,0.16);
+    --indigo: #6366f1;
+    --text-hi: #eef2f7;
+    --text-mid: #9aa7bd;
+    --text-low: #5d6a82;
+    --warning: #fbbf24;
+    --border: rgba(255,255,255,0.08);
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:'Inter', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-hi);
+    min-height:100vh;
+  }
+
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    background: var(--bg-panel);
+    border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:10;
+  }
+  .brand-mark{ display:flex; align-items:center; gap:12px; }
+  .brand-mark .logo-wave{ display:flex; align-items:center; gap:2px; height:22px; }
+  .brand-mark .logo-wave span{
+    width:3px; border-radius:2px; background: linear-gradient(180deg, var(--teal), var(--indigo));
+    animation: bounce 1.3s ease-in-out infinite;
+  }
+  @keyframes bounce{ 0%,100%{ transform:scaleY(.3); } 50%{ transform:scaleY(1); } }
+  .brand-mark .name{ font-family:'Sora', sans-serif; font-weight:700; font-size:16px; }
+  .brand-mark .name span{ color: var(--teal); }
+
+  .nav-links{ display:flex; gap:6px; }
+  .nav-links a{
+    color: var(--text-mid); text-decoration:none; font-size:13.5px; font-weight:500;
+    padding:8px 14px; border-radius:8px; transition: background .15s, color .15s;
+  }
+  .nav-links a:hover{ background: rgba(255,255,255,0.05); color: var(--text-hi); }
+  .nav-links a.active{ background: var(--teal-soft); color: var(--teal); }
+
+  .profile{ display:flex; align-items:center; gap:12px; }
+  .profile .avatar{
+    width:34px; height:34px; border-radius:50%;
+    background: linear-gradient(135deg, var(--teal), var(--indigo));
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:13px; color:#06121c;
+  }
+  .profile .uname{ font-size:13.5px; color: var(--text-mid); }
+
+  main{ max-width:1180px; margin:0 auto; padding:32px 32px 60px; }
+
+  .page-head{ margin-bottom:22px; }
+  .page-head h1{ font-family:'Sora', sans-serif; font-size:26px; margin:0 0 4px; }
+  .page-head p{ font-size:14px; color: var(--text-mid); margin:0; }
+
+  /* ---------- FILTER BAR ---------- */
+  .filter-bar{
+    display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap;
+  }
+  .search-box{
+    flex:1; min-width:220px; display:flex; align-items:center; gap:10px;
+    background: var(--bg-card); border:1px solid var(--border); border-radius:10px;
+    padding:11px 14px;
+  }
+  .search-box input{
+    flex:1; background:none; border:none; outline:none; color: var(--text-hi); font-size:13.5px;
+    font-family:'Inter', sans-serif;
+  }
+  .search-box input::placeholder{ color: var(--text-low); }
+  .search-box .icon{ color: var(--text-low); }
+
+  .filter-chip{
+    background: var(--bg-card); border:1px solid var(--border); border-radius:10px;
+    padding:10px 16px; font-size:13px; color: var(--text-mid); cursor:pointer;
+    transition: border-color .2s, color .2s;
+  }
+  .filter-chip.active{ border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+  .filter-chip:hover{ border-color: var(--teal); }
+
+  /* ---------- TABLE PANEL ---------- */
+  .panel{
+    background: var(--bg-card); border:1px solid var(--border); border-radius:14px; overflow:hidden;
+  }
+  .log-row{
+    display:grid; grid-template-columns: 1.6fr 1fr 0.9fr 0.9fr 0.6fr;
+    align-items:center; gap:12px; padding:16px 22px; border-bottom:1px solid var(--border);
+    cursor:pointer; transition: background .15s;
+  }
+  .log-row:last-child{ border-bottom:none; }
+  .log-row:hover{ background: rgba(255,255,255,0.02); }
+  .log-row.header{
+    background: #0e1828; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;
+    color: var(--text-low); font-weight:600; cursor:default;
+  }
+  .log-row.header:hover{ background: #0e1828; }
+
+  .caller{ display:flex; align-items:center; gap:12px; }
+  .call-avatar{
+    width:36px; height:36px; border-radius:50%; background: rgba(99,102,241,0.18);
+    display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0;
+  }
+  .caller .cname{ font-size:13.5px; font-weight:600; }
+  .caller .cnum{ font-size:11.5px; color: var(--text-low); margin-top:2px; }
+
+  .col-meta{ font-size:13px; color: var(--text-mid); }
+  .call-tag{ font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px; white-space:nowrap; display:inline-block; }
+  .tag-website{ background: rgba(45,212,191,0.15); color: var(--teal); }
+  .tag-app{ background: rgba(99,102,241,0.18); color: #a5b4fc; }
+  .tag-branding{ background: rgba(251,191,36,0.15); color: var(--warning); }
+
+  .expand-arrow{ color: var(--text-low); font-size:13px; transition: transform .2s; text-align:right; }
+  .log-row.open .expand-arrow{ transform: rotate(180deg); color: var(--teal); }
+
+  .transcript{
+    grid-column: 1 / -1; display:none; background:#0b1422; border-radius:10px;
+    margin-top:14px; padding:16px 18px; font-size:13px; color: var(--text-mid); line-height:1.7;
+  }
+  .log-row.open .transcript{ display:block; }
+  .transcript b{ color: var(--text-hi); }
+  .transcript .line{ margin-bottom:8px; }
+
+  @media (max-width: 760px){
+    .log-row{ grid-template-columns: 1fr; gap:6px; }
+    .log-row.header{ display:none; }
+    .col-meta::before{ content: attr(data-label) ": "; color: var(--text-low); }
+    .expand-arrow{ text-align:left; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .logo-wave span{ animation: none !important; }
+  }
+
+  .profile{ position:relative; }
+  .profile-dropdown{
+    position:absolute; top:46px; right:0; min-width:180px;
+    background: var(--bg-card); border:1px solid var(--border); border-radius:12px;
+    padding:8px; display:none; flex-direction:column; gap:2px;
+    box-shadow: 0 16px 36px -12px rgba(0,0,0,0.5); z-index:20;
+  }
+  .profile-dropdown.open{ display:flex; }
+  .dd-item{
+    color: var(--text-mid); text-decoration:none; font-size:13px; padding:9px 12px; border-radius:8px;
+    transition: background .15s, color .15s;
+  }
+  .dd-item:hover{ background: rgba(255,255,255,0.06); color: var(--text-hi); }
+  .dd-divider{ height:1px; background: var(--border); margin:4px 4px; }
+  .dd-logout{ color:#f87171; }
+  .dd-logout:hover{ background: rgba(248,113,113,0.12); color:#f87171; }
+  .avatar{ cursor:pointer; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand-mark">
+    <div class="logo-wave" id="logoWave"></div>
+    <div class="name">Drushya <span>Digital India</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="call-logs.html" class="active">Call Logs</a>
+    <a href="leads.html">Leads</a>
+    <a href="ai-settings.html">Settings</a>
+  </div>
+  <div class="profile" id="profileMenu">
+    <span class="uname">Jayesh Joshi</span>
+    <div class="avatar" id="avatarBtn">JJ</div>
+    <div class="profile-dropdown" id="profileDropdown">
+      <a href="profile.html" class="dd-item">My Profile</a>
+      <a href="account-settings.html" class="dd-item">Account Settings</a>
+      <div class="dd-divider"></div>
+      <a href="login.html" class="dd-item dd-logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="page-head">
+    <h1>Call Logs</h1>
+    <p>Every call handled by your AI Voice Agent, with full transcripts.</p>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by name or number...">
+    </div>
+    <div class="filter-chip active" data-filter="all">All</div>
+    <div class="filter-chip" data-filter="website">Website</div>
+    <div class="filter-chip" data-filter="app">Mobile App</div>
+    <div class="filter-chip" data-filter="branding">Branding</div>
+  </div>
+
+  <div class="panel" id="logPanel">
+    <div class="log-row header">
+      <div>Caller</div>
+      <div>Service</div>
+      <div>Date &amp; Time</div>
+      <div>Duration</div>
+      <div></div>
+    </div>
+    <!-- rows injected by JS -->
+  </div>
+</main>
+
+<script>
+  const calls = [
+    { name:"Ramesh Patil", num:"+91 98765 43210", tag:"website", label:"Website", time:"Today, 2:14 PM", dur:"3m 02s",
+      transcript:[
+        ["AI","Namaste! Drushya Digital India, main aapki kaise help kar sakta hoon?"],
+        ["Ramesh","Mujhe ek website banwani hai, business ke liye."],
+        ["AI","Bahut badhiya! Hamare paas Classic package hai ₹14,999 mein — 5 pages, domain, hosting sab included."],
+        ["Ramesh","Thik hai, mera number note kar lo."],
+        ["AI","Naam aur number confirm kar liya, hamari team callback karegi."]
+      ]},
+    { name:"Sneha Kulkarni", num:"+91 91234 56789", tag:"app", label:"Mobile App", time:"Today, 1:47 PM", dur:"1m 38s",
+      transcript:[
+        ["AI","Namaste! Drushya Digital India, main aapki kaise help kar sakta hoon?"],
+        ["Sneha","Mujhe mobile app banwana hai apne business ke liye."],
+        ["AI","Theek hai, app ke liye hum custom quote denge requirement samajh kar. Aapka naam aur number?"],
+        ["Sneha","Sneha Kulkarni, 91234 56789."]
+      ]},
+    { name:"Vikram Shinde", num:"+91 99887 11223", tag:"branding", label:"Branding", time:"Today, 12:58 PM", dur:"4m 21s",
+      transcript:[
+        ["AI","Namaste! Drushya Digital India, main aapki kaise help kar sakta hoon?"],
+        ["Vikram","Mujhe apna logo aur branding karwana hai."],
+        ["AI","Hamare paas Logo + Brand Kit package hai ₹8,000–₹40,000 ke range mein. Aapki requirement bataiye."],
+        ["Vikram","Bas ek professional logo chahiye abhi ke liye."],
+        ["AI","Theek hai, note kar liya. Team callback karegi details ke saath."]
+      ]},
+    { name:"Anita Deshmukh", num:"+91 90123 45678", tag:"website", label:"Website", time:"Today, 11:30 AM", dur:"2m 05s",
+      transcript:[
+        ["AI","Namaste! Drushya Digital India, main aapki kaise help kar sakta hoon?"],
+        ["Anita","E-commerce website chahiye mujhe."],
+        ["AI","Hamara E Plus package ₹39,999 mein e-commerce + 20 pages deta hai. Naam aur number?"],
+        ["Anita","Anita Deshmukh, 90123 45678."]
+      ]},
+    { name:"Prakash Jadhav", num:"+91 98111 22334", tag:"app", label:"Mobile App", time:"Today, 10:12 AM", dur:"0m 54s",
+      transcript:[
+        ["AI","Namaste! Drushya Digital India, main aapki kaise help kar sakta hoon?"],
+        ["Prakash","Bas pricing janni thi app ki."],
+        ["AI","App ke liye custom quote diya jaata hai requirement ke hisaab se. Team callback karegi."]
+      ]},
+    { name:"Meena Joshi", num:"+91 97001 88990", tag:"website", label:"Website", time:"Yesterday, 5:40 PM", dur:"2m 47s",
+      transcript:[
+        ["AI","Namaste! Drushya Digital India, main aapki kaise help kar sakta hoon?"],
+        ["Meena","Mujhe samajh nahi aa raha kya chahiye, bas online presence improve karna hai."],
+        ["AI","Koi baat nahi, aapka business kis cheez ka hai aur customers aapko kaise find karte hain abhi?"],
+        ["Meena","Main boutique chalati hoon, log Instagram se hi jaante hain."],
+        ["AI","Aapke liye ek simple Website best rahega online presence ke liye. Classic package ₹14,999 mein shuru hota hai."]
+      ]},
+  ];
+
+  const panel = document.getElementById('logPanel');
+
+  function render(list){
+    panel.querySelectorAll('.log-row:not(.header)').forEach(r => r.remove());
+    list.forEach((c, idx) => {
+      const row = document.createElement('div');
+      row.className = 'log-row';
+      row.dataset.tag = c.tag;
+      row.innerHTML = `
+        <div class="caller">
+          <div class="call-avatar">${c.name[0]}</div>
+          <div>
+            <div class="cname">${c.name}</div>
+            <div class="cnum">${c.num}</div>
+          </div>
+        </div>
+        <div class="col-meta" data-label="Service"><span class="call-tag tag-${c.tag}">${c.label}</span></div>
+        <div class="col-meta" data-label="Time">${c.time}</div>
+        <div class="col-meta" data-label="Duration">${c.dur}</div>
+        <div class="expand-arrow">▾</div>
+        <div class="transcript">
+          ${c.transcript.map(([who,line]) => `<div class="line"><b>${who}:</b> ${line}</div>`).join('')}
+        </div>
+      `;
+      row.addEventListener('click', () => row.classList.toggle('open'));
+      panel.appendChild(row);
+    });
+  }
+
+  render(calls);
+
+  // Filter chips
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const f = chip.dataset.filter;
+      const filtered = f === 'all' ? calls : calls.filter(c => c.tag === f);
+      render(applySearch(filtered));
+    });
+  });
+
+  // Search
+  const searchInput = document.getElementById('searchInput');
+  function applySearch(list){
+    const q = searchInput.value.trim().toLowerCase();
+    if(!q) return list;
+    return list.filter(c => c.name.toLowerCase().includes(q) || c.num.includes(q));
+  }
+  searchInput.addEventListener('input', () => {
+    const activeFilter = document.querySelector('.filter-chip.active').dataset.filter;
+    const base = activeFilter === 'all' ? calls : calls.filter(c => c.tag === activeFilter);
+    render(applySearch(base));
+  });
+
+  // Logo wave
+  const wave = document.getElementById('logoWave');
+  for (let i = 0; i < 6; i++) {
+    const bar = document.createElement('span');
+    bar.style.height = (8 + Math.random() * 14) + 'px';
+    bar.style.animationDelay = (Math.random() * 1).toFixed(2) + 's';
+    wave.appendChild(bar);
+  }
+
+  // Profile dropdown toggle
+  const avatarBtn = document.getElementById('avatarBtn');
+  const profileDropdown = document.getElementById('profileDropdown');
+  if (avatarBtn && profileDropdown) {
+    avatarBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('profileMenu').contains(e.target)) {
+        profileDropdown.classList.remove('open');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

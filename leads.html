@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drushya Digital India — Leads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #0c1320;
+    --bg-panel: #101a2c;
+    --bg-card: #131f33;
+    --teal: #2dd4bf;
+    --teal-soft: rgba(45,212,191,0.16);
+    --indigo: #6366f1;
+    --text-hi: #eef2f7;
+    --text-mid: #9aa7bd;
+    --text-low: #5d6a82;
+    --warning: #fbbf24;
+    --success: #34d399;
+    --border: rgba(255,255,255,0.08);
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:'Inter', sans-serif; background: var(--bg-deep); color: var(--text-hi); min-height:100vh; }
+
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; background: var(--bg-panel); border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:10;
+  }
+  .brand-mark{ display:flex; align-items:center; gap:12px; }
+  .brand-mark .logo-wave{ display:flex; align-items:center; gap:2px; height:22px; }
+  .brand-mark .logo-wave span{
+    width:3px; border-radius:2px; background: linear-gradient(180deg, var(--teal), var(--indigo));
+    animation: bounce 1.3s ease-in-out infinite;
+  }
+  @keyframes bounce{ 0%,100%{ transform:scaleY(.3); } 50%{ transform:scaleY(1); } }
+  .brand-mark .name{ font-family:'Sora', sans-serif; font-weight:700; font-size:16px; }
+  .brand-mark .name span{ color: var(--teal); }
+  .nav-links{ display:flex; gap:6px; }
+  .nav-links a{
+    color: var(--text-mid); text-decoration:none; font-size:13.5px; font-weight:500;
+    padding:8px 14px; border-radius:8px; transition: background .15s, color .15s;
+  }
+  .nav-links a:hover{ background: rgba(255,255,255,0.05); color: var(--text-hi); }
+  .nav-links a.active{ background: var(--teal-soft); color: var(--teal); }
+  .profile{ display:flex; align-items:center; gap:12px; }
+  .profile .avatar{
+    width:34px; height:34px; border-radius:50%;
+    background: linear-gradient(135deg, var(--teal), var(--indigo));
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:#06121c;
+  }
+  .profile .uname{ font-size:13.5px; color: var(--text-mid); }
+
+  main{ max-width:1180px; margin:0 auto; padding:32px 32px 60px; }
+  .page-head{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px; }
+  .page-head h1{ font-family:'Sora', sans-serif; font-size:26px; margin:0 0 4px; }
+  .page-head p{ font-size:14px; color: var(--text-mid); margin:0; }
+  .count-pill{
+    font-size:12.5px; color: var(--teal); background: var(--teal-soft); padding:8px 14px; border-radius:30px; font-weight:600;
+  }
+
+  .filter-bar{ display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .search-box{
+    flex:1; min-width:220px; display:flex; align-items:center; gap:10px;
+    background: var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:11px 14px;
+  }
+  .search-box input{
+    flex:1; background:none; border:none; outline:none; color: var(--text-hi); font-size:13.5px; font-family:'Inter', sans-serif;
+  }
+  .search-box input::placeholder{ color: var(--text-low); }
+  .filter-chip{
+    background: var(--bg-card); border:1px solid var(--border); border-radius:10px;
+    padding:10px 16px; font-size:13px; color: var(--text-mid); cursor:pointer; transition: border-color .2s, color .2s;
+  }
+  .filter-chip.active{ border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+  .filter-chip:hover{ border-color: var(--teal); }
+
+  /* ---------- LEAD CARDS GRID ---------- */
+  .leads-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; }
+  @media (max-width: 980px){ .leads-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px){ .leads-grid{ grid-template-columns: 1fr; } }
+
+  .lead-card{
+    background: var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:18px;
+    opacity:0; transform: translateY(8px); animation: riseIn .4s ease forwards;
+  }
+  @keyframes riseIn{ to{ opacity:1; transform:translateY(0); } }
+
+  .lead-top{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .lead-avatar{
+    width:42px; height:42px; border-radius:50%; background: rgba(99,102,241,0.18);
+    display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600; flex-shrink:0;
+  }
+  .lead-name{ font-size:14.5px; font-weight:700; }
+  .lead-time{ font-size:11.5px; color: var(--text-low); margin-top:2px; }
+
+  .lead-status{
+    margin-left:auto; font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:20px; text-transform:uppercase;
+  }
+  .status-new{ background: rgba(45,212,191,0.15); color: var(--teal); }
+  .status-contacted{ background: rgba(251,191,36,0.15); color: var(--warning); }
+  .status-closed{ background: rgba(52,211,153,0.15); color: var(--success); }
+
+  .lead-detail{ font-size:13px; color: var(--text-mid); margin-bottom:8px; display:flex; gap:8px; }
+  .lead-detail .lbl{ color: var(--text-low); min-width:64px; flex-shrink:0; }
+  .call-tag{ font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; display:inline-block; }
+  .tag-website{ background: rgba(45,212,191,0.15); color: var(--teal); }
+  .tag-app{ background: rgba(99,102,241,0.18); color: #a5b4fc; }
+  .tag-branding{ background: rgba(251,191,36,0.15); color: var(--warning); }
+
+  .lead-req{
+    font-size:12.5px; color: var(--text-mid); background:#0f1828; border-radius:8px; padding:10px 12px;
+    margin-top:10px; line-height:1.5;
+  }
+
+  .lead-actions{ display:flex; gap:8px; margin-top:14px; }
+  .lead-actions button{
+    flex:1; padding:8px; font-size:12px; font-weight:600; border-radius:8px; border:1px solid var(--border);
+    background:#0f1828; color: var(--text-mid); cursor:pointer; transition: border-color .2s, color .2s;
+    font-family:'Inter', sans-serif;
+  }
+  .lead-actions button:hover{ border-color: var(--teal); color: var(--teal); }
+
+  @media (prefers-reduced-motion: reduce){ .logo-wave span, .lead-card{ animation: none !important; } }
+
+  .profile{ position:relative; }
+  .profile-dropdown{
+    position:absolute; top:46px; right:0; min-width:180px;
+    background: var(--bg-card); border:1px solid var(--border); border-radius:12px;
+    padding:8px; display:none; flex-direction:column; gap:2px;
+    box-shadow: 0 16px 36px -12px rgba(0,0,0,0.5); z-index:20;
+  }
+  .profile-dropdown.open{ display:flex; }
+  .dd-item{
+    color: var(--text-mid); text-decoration:none; font-size:13px; padding:9px 12px; border-radius:8px;
+    transition: background .15s, color .15s;
+  }
+  .dd-item:hover{ background: rgba(255,255,255,0.06); color: var(--text-hi); }
+  .dd-divider{ height:1px; background: var(--border); margin:4px 4px; }
+  .dd-logout{ color:#f87171; }
+  .dd-logout:hover{ background: rgba(248,113,113,0.12); color:#f87171; }
+  .avatar{ cursor:pointer; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand-mark">
+    <div class="logo-wave" id="logoWave"></div>
+    <div class="name">Drushya <span>Digital India</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="call-logs.html">Call Logs</a>
+    <a href="leads.html" class="active">Leads</a>
+    <a href="ai-settings.html">Settings</a>
+  </div>
+  <div class="profile" id="profileMenu">
+    <span class="uname">Jayesh Joshi</span>
+    <div class="avatar" id="avatarBtn">JJ</div>
+    <div class="profile-dropdown" id="profileDropdown">
+      <a href="profile.html" class="dd-item">My Profile</a>
+      <a href="account-settings.html" class="dd-item">Account Settings</a>
+      <div class="dd-divider"></div>
+      <a href="login.html" class="dd-item dd-logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="page-head">
+    <div>
+      <h1>Leads</h1>
+      <p>Everyone the AI Voice Agent has spoken to, in one place.</p>
+    </div>
+    <div class="count-pill" id="countPill">11 leads this week</div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by name or number...">
+    </div>
+    <div class="filter-chip active" data-filter="all">All</div>
+    <div class="filter-chip" data-filter="new">New</div>
+    <div class="filter-chip" data-filter="contacted">Contacted</div>
+    <div class="filter-chip" data-filter="closed">Closed</div>
+  </div>
+
+  <div class="leads-grid" id="leadsGrid"></div>
+</main>
+
+<script>
+  const leads = [
+    { name:"Ramesh Patil", num:"+91 98765 43210", tag:"website", label:"Website", status:"new", time:"Today, 2:14 PM",
+      req:"Wants a 5-page business website with basic SEO. Interested in the Classic package." },
+    { name:"Sneha Kulkarni", num:"+91 91234 56789", tag:"app", label:"Mobile App", status:"new", time:"Today, 1:47 PM",
+      req:"Needs a mobile app for her business. Requested a custom quote." },
+    { name:"Vikram Shinde", num:"+91 99887 11223", tag:"branding", label:"Branding", status:"contacted", time:"Today, 12:58 PM",
+      req:"Wants a professional logo design. Quick turnaround preferred." },
+    { name:"Anita Deshmukh", num:"+91 90123 45678", tag:"website", label:"Website", status:"new", time:"Today, 11:30 AM",
+      req:"Looking for an e-commerce website, interested in the E Plus package." },
+    { name:"Prakash Jadhav", num:"+91 98111 22334", tag:"app", label:"Mobile App", status:"contacted", time:"Today, 10:12 AM",
+      req:"Asked about app pricing only, did not share full requirement yet." },
+    { name:"Meena Joshi", num:"+91 97001 88990", tag:"website", label:"Website", status:"closed", time:"Yesterday, 5:40 PM",
+      req:"Runs a boutique, wanted to improve online presence. Recommended a Classic website — deal closed." },
+    { name:"Rahul Pawar", num:"+91 96332 10980", tag:"branding", label:"Branding", status:"closed", time:"Yesterday, 3:15 PM",
+      req:"Needed full brand identity package for a new restaurant. Deal closed." },
+    { name:"Komal Bhosale", num:"+91 95012 33445", tag:"website", label:"Website", status:"contacted", time:"Yesterday, 1:02 PM",
+      req:"Custom website requirement, discussing scope with team." },
+    { name:"Suresh Gaikwad", num:"+91 93221 09887", tag:"app", label:"Mobile App", status:"new", time:"2 days ago",
+      req:"Wants a full-featured app with admin dashboard and integrations." },
+    { name:"Pooja Nikam", num:"+91 92110 44556", tag:"website", label:"Website", status:"new", time:"2 days ago",
+      req:"Needs a simple 5-page site for a coaching institute." },
+    { name:"Amol Wagh", num:"+91 91004 77889", tag:"branding", label:"Branding", status:"new", time:"3 days ago",
+      req:"Wants monthly social media creatives along with a logo refresh." },
+  ];
+
+  const grid = document.getElementById('leadsGrid');
+  const countPill = document.getElementById('countPill');
+
+  function render(list){
+    grid.innerHTML = '';
+    list.forEach(l => {
+      const card = document.createElement('div');
+      card.className = 'lead-card';
+      const statusLabel = l.status === 'new' ? 'New' : l.status === 'contacted' ? 'Contacted' : 'Closed';
+      card.innerHTML = `
+        <div class="lead-top">
+          <div class="lead-avatar">${l.name[0]}</div>
+          <div>
+            <div class="lead-name">${l.name}</div>
+            <div class="lead-time">${l.time}</div>
+          </div>
+          <div class="lead-status status-${l.status}">${statusLabel}</div>
+        </div>
+        <div class="lead-detail"><span class="lbl">Phone</span> ${l.num}</div>
+        <div class="lead-detail"><span class="lbl">Service</span> <span class="call-tag tag-${l.tag}">${l.label}</span></div>
+        <div class="lead-req">${l.req}</div>
+        <div class="lead-actions">
+          <button type="button">Call back</button>
+          <button type="button">Mark contacted</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    countPill.textContent = `${list.length} lead${list.length === 1 ? '' : 's'} this week`;
+  }
+
+  render(leads);
+
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      applyFilters();
+    });
+  });
+
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', applyFilters);
+
+  function applyFilters(){
+    const f = document.querySelector('.filter-chip.active').dataset.filter;
+    const q = searchInput.value.trim().toLowerCase();
+    let list = f === 'all' ? leads : leads.filter(l => l.status === f);
+    if (q) list = list.filter(l => l.name.toLowerCase().includes(q) || l.num.includes(q));
+    render(list);
+  }
+
+  const wave = document.getElementById('logoWave');
+  for (let i = 0; i < 6; i++) {
+    const bar = document.createElement('span');
+    bar.style.height = (8 + Math.random() * 14) + 'px';
+    bar.style.animationDelay = (Math.random() * 1).toFixed(2) + 's';
+    wave.appendChild(bar);
+  }
+
+  // Profile dropdown toggle
+  const avatarBtn = document.getElementById('avatarBtn');
+  const profileDropdown = document.getElementById('profileDropdown');
+  if (avatarBtn && profileDropdown) {
+    avatarBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('profileMenu').contains(e.target)) {
+        profileDropdown.classList.remove('open');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

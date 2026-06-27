@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drushya Digital India — AI Script Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #0c1320;
+    --bg-panel: #101a2c;
+    --bg-card: #131f33;
+    --teal: #2dd4bf;
+    --teal-soft: rgba(45,212,191,0.16);
+    --indigo: #6366f1;
+    --text-hi: #eef2f7;
+    --text-mid: #9aa7bd;
+    --text-low: #5d6a82;
+    --warning: #fbbf24;
+    --success: #34d399;
+    --border: rgba(255,255,255,0.08);
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:'Inter', sans-serif; background: var(--bg-deep); color: var(--text-hi); min-height:100vh; }
+
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; background: var(--bg-panel); border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:10;
+  }
+  .brand-mark{ display:flex; align-items:center; gap:12px; }
+  .brand-mark .logo-wave{ display:flex; align-items:center; gap:2px; height:22px; }
+  .brand-mark .logo-wave span{
+    width:3px; border-radius:2px; background: linear-gradient(180deg, var(--teal), var(--indigo));
+    animation: bounce 1.3s ease-in-out infinite;
+  }
+  @keyframes bounce{ 0%,100%{ transform:scaleY(.3); } 50%{ transform:scaleY(1); } }
+  .brand-mark .name{ font-family:'Sora', sans-serif; font-weight:700; font-size:16px; }
+  .brand-mark .name span{ color: var(--teal); }
+  .nav-links{ display:flex; gap:6px; }
+  .nav-links a{
+    color: var(--text-mid); text-decoration:none; font-size:13.5px; font-weight:500;
+    padding:8px 14px; border-radius:8px; transition: background .15s, color .15s;
+  }
+  .nav-links a:hover{ background: rgba(255,255,255,0.05); color: var(--text-hi); }
+  .nav-links a.active{ background: var(--teal-soft); color: var(--teal); }
+  .profile{ display:flex; align-items:center; gap:12px; }
+  .profile .avatar{
+    width:34px; height:34px; border-radius:50%;
+    background: linear-gradient(135deg, var(--teal), var(--indigo));
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:#06121c;
+  }
+  .profile .uname{ font-size:13.5px; color: var(--text-mid); }
+
+  main{ max-width:980px; margin:0 auto; padding:32px 32px 80px; }
+  .page-head{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:26px; flex-wrap:wrap; gap:14px; }
+  .page-head h1{ font-family:'Sora', sans-serif; font-size:26px; margin:0 0 4px; }
+  .page-head p{ font-size:14px; color: var(--text-mid); margin:0; }
+
+  .save-bar{
+    display:flex; align-items:center; gap:14px;
+  }
+  .save-status{ font-size:12.5px; color: var(--text-low); }
+  .save-status.saved{ color: var(--success); }
+  .btn-save{
+    padding:11px 22px; border:none; border-radius:10px;
+    background: linear-gradient(135deg, var(--teal), var(--indigo));
+    color:#06121c; font-weight:700; font-size:14px; cursor:pointer;
+    font-family:'Sora', sans-serif; transition: transform .15s, box-shadow .2s;
+    box-shadow: 0 10px 22px -8px rgba(45,212,191,0.45);
+  }
+  .btn-save:hover{ transform: translateY(-1px); }
+
+  /* ---------- TABS ---------- */
+  .tabs{ display:flex; gap:6px; margin-bottom:22px; border-bottom:1px solid var(--border); }
+  .tab{
+    padding:11px 18px; font-size:13.5px; font-weight:600; color: var(--text-mid); cursor:pointer;
+    border-bottom:2px solid transparent; transition: color .2s, border-color .2s;
+  }
+  .tab.active{ color: var(--teal); border-color: var(--teal); }
+  .tab:hover{ color: var(--text-hi); }
+
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  .panel{ background: var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; }
+  .panel h2{ font-family:'Sora', sans-serif; font-size:16px; margin:0 0 4px; }
+  .panel .desc{ font-size:13px; color: var(--text-mid); margin:0 0 16px; }
+
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:12.5px; font-weight:600; color: var(--text-mid); margin-bottom:7px; }
+  .field textarea, .field input, .field select{
+    width:100%; padding:12px 14px; font-size:13.5px;
+    background: #0b1422; border:1.5px solid var(--border); border-radius:10px;
+    color: var(--text-hi); outline:none; font-family:'Inter', sans-serif;
+    transition: border-color .2s, box-shadow .2s; resize: vertical;
+  }
+  .field textarea:focus, .field input:focus, .field select:focus{
+    border-color: var(--teal); box-shadow: 0 0 0 4px var(--teal-soft);
+  }
+  .field .hint{ font-size:11.5px; color: var(--text-low); margin-top:6px; }
+
+  /* FAQ rows */
+  .faq-row{ display:grid; grid-template-columns: 1fr 1fr auto; gap:10px; margin-bottom:10px; align-items:start; }
+  .faq-row input{ width:100%; padding:10px 12px; font-size:13px; background:#0b1422; border:1.5px solid var(--border); border-radius:8px; color: var(--text-hi); outline:none; }
+  .faq-row input:focus{ border-color: var(--teal); }
+  .faq-remove{
+    background:#0b1422; border:1px solid var(--border); color: var(--text-low); border-radius:8px;
+    width:38px; height:38px; cursor:pointer; font-size:14px; transition: border-color .2s, color .2s;
+  }
+  .faq-remove:hover{ border-color:#f87171; color:#f87171; }
+  .btn-add{
+    margin-top:6px; background: var(--teal-soft); color: var(--teal); border:1px dashed var(--teal);
+    padding:9px 16px; border-radius:8px; font-size:12.5px; font-weight:600; cursor:pointer;
+  }
+  .btn-add:hover{ background: rgba(45,212,191,0.25); }
+
+  /* Pricing package rows */
+  .pkg-row{ display:grid; grid-template-columns: 1fr 1fr 2fr; gap:10px; margin-bottom:10px; }
+  .pkg-row input{ padding:10px 12px; font-size:13px; background:#0b1422; border:1.5px solid var(--border); border-radius:8px; color: var(--text-hi); outline:none; }
+  .pkg-row input:focus{ border-color: var(--teal); }
+
+  .toggle-row{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); }
+  .toggle-row:last-child{ border-bottom:none; }
+  .toggle-row .label{ font-size:13.5px; font-weight:600; }
+  .toggle-row .sub{ font-size:12px; color: var(--text-mid); margin-top:2px; }
+  .switch{ position:relative; width:44px; height:24px; flex-shrink:0; }
+  .switch input{ opacity:0; width:0; height:0; }
+  .slider{
+    position:absolute; cursor:pointer; inset:0; background: #2a3650; border-radius:24px; transition: .25s;
+  }
+  .slider::before{
+    content:""; position:absolute; height:18px; width:18px; left:3px; bottom:3px;
+    background:white; border-radius:50%; transition: .25s;
+  }
+  .switch input:checked + .slider{ background: var(--teal); }
+  .switch input:checked + .slider::before{ transform: translateX(20px); }
+
+  @media (max-width: 700px){
+    .faq-row{ grid-template-columns: 1fr; }
+    .pkg-row{ grid-template-columns: 1fr; }
+    .page-head{ flex-direction:column; align-items:flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce){ .logo-wave span{ animation: none !important; } }
+
+  .profile{ position:relative; }
+  .profile-dropdown{
+    position:absolute; top:46px; right:0; min-width:180px;
+    background: var(--bg-card); border:1px solid var(--border); border-radius:12px;
+    padding:8px; display:none; flex-direction:column; gap:2px;
+    box-shadow: 0 16px 36px -12px rgba(0,0,0,0.5); z-index:20;
+  }
+  .profile-dropdown.open{ display:flex; }
+  .dd-item{
+    color: var(--text-mid); text-decoration:none; font-size:13px; padding:9px 12px; border-radius:8px;
+    transition: background .15s, color .15s;
+  }
+  .dd-item:hover{ background: rgba(255,255,255,0.06); color: var(--text-hi); }
+  .dd-divider{ height:1px; background: var(--border); margin:4px 4px; }
+  .dd-logout{ color:#f87171; }
+  .dd-logout:hover{ background: rgba(248,113,113,0.12); color:#f87171; }
+  .avatar{ cursor:pointer; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand-mark">
+    <div class="logo-wave" id="logoWave"></div>
+    <div class="name">Drushya <span>Digital India</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="call-logs.html">Call Logs</a>
+    <a href="leads.html">Leads</a>
+    <a href="ai-settings.html" class="active">Settings</a>
+  </div>
+  <div class="profile" id="profileMenu">
+    <span class="uname">Jayesh Joshi</span>
+    <div class="avatar" id="avatarBtn">JJ</div>
+    <div class="profile-dropdown" id="profileDropdown">
+      <a href="profile.html" class="dd-item">My Profile</a>
+      <a href="account-settings.html" class="dd-item">Account Settings</a>
+      <div class="dd-divider"></div>
+      <a href="login.html" class="dd-item dd-logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="page-head">
+    <div>
+      <h1>AI Script Settings</h1>
+      <p>Edit how your AI Voice Agent greets, answers, and prices — no developer needed.</p>
+    </div>
+    <div class="save-bar">
+      <span class="save-status" id="saveStatus">Unsaved changes</span>
+      <button class="btn-save" id="saveBtn">Save Changes</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="greeting">Greeting &amp; Tone</div>
+    <div class="tab" data-tab="faq">FAQs</div>
+    <div class="tab" data-tab="pricing">Pricing</div>
+    <div class="tab" data-tab="voice">Voice &amp; Language</div>
+    <div class="tab" data-tab="phone">Phone Number</div>
+  </div>
+
+  <!-- GREETING TAB -->
+  <div class="tab-panel active" id="panel-greeting">
+    <div class="panel">
+      <h2>First Message</h2>
+      <p class="desc">What the AI says when it picks up the call.</p>
+      <div class="field">
+        <textarea rows="2" id="firstMessage">Hi! Welcome to Drushya Digital India — main aapki kaise help kar sakta/sakti hoon?</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Tone &amp; Personality</h2>
+      <p class="desc">How the AI should sound during the conversation.</p>
+      <div class="field">
+        <textarea rows="3" id="tonePrompt">Friendly and professional — like a warm, polite customer support executive. Not overly salesy or energetic, but approachable and helpful, speaking in a natural Hindi-English mix (Hinglish).</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Working Hours</h2>
+      <div class="field">
+        <label>Hours</label>
+        <input type="text" id="workingHours" value="Monday – Sunday, 10 AM – 6 PM">
+      </div>
+      <div class="field">
+        <label>Contact email for callbacks</label>
+        <input type="email" id="contactEmail" value="drushyaindia@gmail.com">
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ TAB -->
+  <div class="tab-panel" id="panel-faq">
+    <div class="panel">
+      <h2>Frequently Asked Questions</h2>
+      <p class="desc">Add questions and answers the AI should know automatically.</p>
+      <div id="faqList"></div>
+      <button class="btn-add" id="addFaq">+ Add another question</button>
+    </div>
+  </div>
+
+  <!-- PRICING TAB -->
+  <div class="tab-panel" id="panel-pricing">
+    <div class="panel">
+      <h2>Website Packages</h2>
+      <p class="desc">These are quoted to callers asking about website pricing.</p>
+      <div id="pkgList"></div>
+      <button class="btn-add" id="addPkg">+ Add another package</button>
+    </div>
+
+    <div class="panel">
+      <h2>Mobile App &amp; Branding</h2>
+      <div class="field">
+        <label>Default response for app/branding pricing</label>
+        <textarea rows="2" id="customQuoteText">We don't have fixed packages for mobile apps or branding — we'll understand your requirement and share a custom quote.</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOICE TAB -->
+  <div class="tab-panel" id="panel-voice">
+    <div class="panel">
+      <h2>Voice &amp; Transcription</h2>
+      <div class="field">
+        <label>AI Voice</label>
+        <select id="voiceSelect">
+          <option>Clara (Vapi)</option>
+          <option>Elliot (Vapi)</option>
+          <option>ElevenLabs — Hindi Female</option>
+          <option>ElevenLabs — Hindi Male</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Transcription Language</label>
+        <select id="langSelect">
+          <option>Hindi (Deepgram Nova-2)</option>
+          <option>English</option>
+          <option>Auto-detect</option>
+        </select>
+        <div class="hint">Hindi is recommended since most callers speak Hindi/Hinglish.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Call Behaviour</h2>
+      <div class="toggle-row">
+        <div>
+          <div class="label">Take a message if AI can't answer</div>
+          <div class="sub">Instead of transferring, the AI notes details and assures a callback.</div>
+        </div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="label">Suggest "Other / Not sure" routing</div>
+          <div class="sub">Ask 2 quick questions to help undecided callers pick a service.</div>
+        </div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="label">Confirm contact number by repeating it back</div>
+          <div class="sub">Reduces errors in captured lead details.</div>
+        </div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE NUMBER TAB -->
+  <div class="tab-panel" id="panel-phone">
+    <div class="panel">
+      <h2>Connected Phone Numbers</h2>
+      <p class="desc">Numbers your AI Voice Agent is currently answering calls on.</p>
+      <div id="phoneList"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Add a New Number</h2>
+      <p class="desc">Connect another business number to the AI Voice Agent.</p>
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="text" id="newPhoneNumber" placeholder="+91 XXXXX XXXXX">
+      </div>
+      <div class="field">
+        <label>Label</label>
+        <input type="text" id="newPhoneLabel" placeholder="e.g. Sales Line, Support Line">
+      </div>
+      <button class="btn-add" id="addPhone" style="border-style:solid;">+ Connect Number</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Phone numbers
+  const phones = [
+    { number:"+91 96735 75452", label:"Main Business Line", status:"active" },
+  ];
+  const phoneList = document.getElementById('phoneList');
+
+  function renderPhones(){
+    phoneList.innerHTML = '';
+    phones.forEach((p, i) => {
+      const row = document.createElement('div');
+      row.className = 'toggle-row';
+      row.innerHTML = `
+        <div>
+          <div class="label">${p.number}</div>
+          <div class="sub">${p.label}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; background:rgba(52,211,153,0.15); color:#34d399; text-transform:uppercase;">${p.status}</span>
+          <button class="faq-remove" data-idx="${i}" title="Remove">✕</button>
+        </div>
+      `;
+      phoneList.appendChild(row);
+    });
+    phoneList.querySelectorAll('.faq-remove').forEach(btn => {
+      btn.addEventListener('click', () => { phones.splice(+btn.dataset.idx, 1); renderPhones(); });
+    });
+  }
+  renderPhones();
+
+  document.getElementById('addPhone').addEventListener('click', () => {
+    const num = document.getElementById('newPhoneNumber').value.trim();
+    const lbl = document.getElementById('newPhoneLabel').value.trim();
+    if (!num) return;
+    phones.push({ number: num, label: lbl || 'New Line', status: 'active' });
+    renderPhones();
+    document.getElementById('newPhoneNumber').value = '';
+    document.getElementById('newPhoneLabel').value = '';
+    markUnsaved();
+  });
+</script>
+
+<script>
+  // Tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // FAQ list
+  const faqs = [
+    { q:"What services do you offer?", a:"Website development, mobile app development, graphic design/branding, and digital marketing." },
+    { q:"How long does a website take?", a:"Typically 2–6 weeks depending on scope." },
+    { q:"Do you offer e-commerce websites?", a:"Yes, our E Plus package supports e-commerce with up to 20 pages." },
+  ];
+  const faqList = document.getElementById('faqList');
+
+  function renderFaqs(){
+    faqList.innerHTML = '';
+    faqs.forEach((f, i) => {
+      const row = document.createElement('div');
+      row.className = 'faq-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Question" value="${f.q}">
+        <input type="text" placeholder="Answer" value="${f.a}">
+        <button class="faq-remove" data-idx="${i}">✕</button>
+      `;
+      faqList.appendChild(row);
+    });
+    faqList.querySelectorAll('.faq-remove').forEach(btn => {
+      btn.addEventListener('click', () => { faqs.splice(+btn.dataset.idx, 1); renderFaqs(); markUnsaved(); });
+    });
+  }
+  renderFaqs();
+  document.getElementById('addFaq').addEventListener('click', () => { faqs.push({q:'',a:''}); renderFaqs(); markUnsaved(); });
+
+  // Pricing packages
+  const pkgs = [
+    { name:"Classic", price:"₹14,999", desc:"5 pages + domain + hosting + SSL + business email" },
+    { name:"Star", price:"₹24,999", desc:"10 pages + SEO-ready + payment gateway" },
+    { name:"E Plus", price:"₹39,999", desc:"E-commerce + up to 20 pages" },
+    { name:"Custom", price:"₹99,999+", desc:"Custom functionality as per requirement" },
+  ];
+  const pkgList = document.getElementById('pkgList');
+
+  function renderPkgs(){
+    pkgList.innerHTML = '';
+    pkgs.forEach((p) => {
+      const row = document.createElement('div');
+      row.className = 'pkg-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Package name" value="${p.name}">
+        <input type="text" placeholder="Price" value="${p.price}">
+        <input type="text" placeholder="What's included" value="${p.desc}">
+      `;
+      pkgList.appendChild(row);
+    });
+  }
+  renderPkgs();
+  document.getElementById('addPkg').addEventListener('click', () => { pkgs.push({name:'',price:'',desc:''}); renderPkgs(); markUnsaved(); });
+
+  // Save status tracking
+  const saveStatus = document.getElementById('saveStatus');
+  function markUnsaved(){ saveStatus.textContent = 'Unsaved changes'; saveStatus.classList.remove('saved'); }
+  main_root_listen();
+  function main_root_listen(){
+    document.querySelectorAll('input, textarea, select').forEach(el => el.addEventListener('input', markUnsaved));
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    saveStatus.textContent = '✓ All changes saved';
+    saveStatus.classList.add('saved');
+  });
+
+  // Logo wave
+  const wave = document.getElementById('logoWave');
+  for (let i = 0; i < 6; i++) {
+    const bar = document.createElement('span');
+    bar.style.height = (8 + Math.random() * 14) + 'px';
+    bar.style.animationDelay = (Math.random() * 1).toFixed(2) + 's';
+    wave.appendChild(bar);
+  }
+
+  // Profile dropdown toggle
+  const avatarBtn = document.getElementById('avatarBtn');
+  const profileDropdown = document.getElementById('profileDropdown');
+  if (avatarBtn && profileDropdown) {
+    avatarBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('profileMenu').contains(e.target)) {
+        profileDropdown.classList.remove('open');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "drushya-voice-agent-backend",
+  "version": "1.0.0",
+  "description": "Backend server for Drushya Digital India AI Voice Calling Agent",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "twilio": "^5.3.0",
+    "@anthropic-ai/sdk": "^0.32.1",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5"
+  }
+}
